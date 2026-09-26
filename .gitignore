@@ -92,3 +92,5 @@ secrets/
 .env
 *.lock
 !uv.lock
+
+!uv.lock
