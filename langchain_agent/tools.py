@@ -9,6 +9,7 @@ from sentence_transformers import SentenceTransformer
 
 from config import settings
 from langchain_agent.rag import retrieve, build_context
+from agent_logic import build_upgrade_advice, compare_plans_text
 
 
 # ---------------------------------------------------------------------------
@@ -33,6 +34,14 @@ except Exception as exc:
 # ---------------------------------------------------------------------------
 
 MOCK_CUSTOMER_DB = {
+    "9000000001": {
+        "name": "Sana Ali", "plan": "Lauki Premium 2GB",
+        "balance_inr": 120.00, "balance_type": "postpaid",
+        "next_bill_date": "2026-10-20",
+        "data_usage_gb": 1.9, "data_limit_gb": 2.0,
+        "voice_usage_min": 280, "voice_limit_min": 300,
+        "sms_usage": 60, "sms_limit": 100,
+    },
     "9876543210": {
         "name": "Rajesh Kumar",
         "plan": "Lauki Premium 2GB",
@@ -266,7 +275,24 @@ def escalate_to_support(reason: str) -> str:
         f"Your reference is {ticket_id}."
     )
 
+@tool
+def suggest_upgrade(phone_number: str) -> str:
+    """Check a customer's usage and say whether they should upgrade their plan.
+    Requires a 10-digit phone number."""
+    phone_number = phone_number.strip()
+    if not phone_number.isdigit() or len(phone_number) != 10:
+        return "Invalid phone number. Please provide a valid 10-digit mobile number."
+    customer = MOCK_CUSTOMER_DB.get(phone_number)
+    if not customer:
+        return f"No account found for {phone_number}. Please verify the number."
+    return build_upgrade_advice(customer, MOCK_PLANS_DB)
 
+
+@tool
+def compare_plans(plan_a: str, plan_b: str) -> str:
+    """Compare two Lauki plans side by side (price, data, voice, SMS).
+    Example: plan_a='Premium', plan_b='Elite'."""
+    return compare_plans_text(MOCK_PLANS_DB, plan_a, plan_b)
 # ---------------------------------------------------------------------------
 # System prompt
 # ---------------------------------------------------------------------------
@@ -276,6 +302,8 @@ SYSTEM_PROMPT = (
     "\n"
     "GUIDELINES:\n"
     "- Use search_plans to answer questions about data plans, pricing, validity, or comparisons.\n"
+    "- Use suggest_upgrade when the customer asks if they should upgrade (needs their 10-digit number).\n"
+    "- Use compare_plans when the customer wants two plans compared.\n"
     "- Use check_account_balance when the customer provides their 10-digit phone number.\n"
     "- Use check_network_status for 4G/5G coverage questions.\n"
     "- Use get_plan_recommendation when the customer describes usage patterns.\n"
@@ -284,6 +312,7 @@ SYSTEM_PROMPT = (
     "\n"
     "TONE:\n"
     "- Be warm, professional, and helpful.\n"
+    "- If the customer speaks Hindi or Urdu, answer in the same language in simple spoken words; keep plan names, ₹ amounts and phone numbers unchanged.\n"
     "- Keep responses SHORT — this is a voice call, not text chat.\n"
     "- Use Indian currency (₹).\n"
     "\n"
@@ -307,6 +336,8 @@ ALL_TOOLS = [
     get_plan_recommendation,
     get_plan_details,
     escalate_to_support,
+    suggest_upgrade,
+    compare_plans,
 ]
 
 llm = ChatGroq(model=settings.groq_model, temperature=0.0)
