@@ -79,6 +79,15 @@ def test_extract_prices():
     assert extract_prices("No prices here, 5G is available") == []
 
 
+def test_extract_prices_ignores_words_ending_in_rs():
+    # Bug found in a real run: "offers 5 GB" was read as "Rs 5".
+    assert extract_prices("The Elite plan offers 5 GB data") == []
+    assert extract_prices("Our users 5 times more") == []
+    assert extract_prices("Open for 24 hours 7 days") == []
+    assert extract_prices("Elite offers 5 GB for ₹899 a month") == [899.0]
+    assert extract_prices("Rs 449 or Rs. 1,299") == [449.0, 1299.0]
+
+
 def test_price_guardrail():
     allowed = allowed_prices(PLANS, CUSTOMERS)
     assert 450.5 in allowed and 449.0 in allowed

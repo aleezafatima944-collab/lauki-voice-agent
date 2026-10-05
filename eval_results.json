@@ -1,0 +1,153 @@
+{
+  "summary": {
+    "model": "openai/gpt-oss-120b",
+    "questions": 10,
+    "passed": 10,
+    "price_safe": 10,
+    "errors": 0,
+    "latency_avg_s": 1.91,
+    "latency_median_s": 1.21,
+    "latency_max_s": 7.69
+  },
+  "results": [
+    {
+      "question": "How much is the Lauki Premium 2GB plan?",
+      "answer": "The Lauki Premium 2GB plan costs ₹449 for a 30‑day validity.",
+      "tools_called": [
+        "get_plan_details"
+      ],
+      "tool_ok": true,
+      "facts_ok": true,
+      "price_ok": true,
+      "forbidden_ok": true,
+      "unverified_prices": [],
+      "latency_s": 1.07,
+      "passed": true
+    },
+    {
+      "question": "What is the balance for 9876543210?",
+      "answer": "Sure! Your account shows an outstanding bill of ₹450.50, due on 11 Oct 2026. You’ve used 1.2 GB of your 2 GB data, 120 minutes of 300 voice minutes, and 45 SMS of 100. Let me know if you need anything else!",
+      "tools_called": [
+        "check_account_balance"
+      ],
+      "tool_ok": true,
+      "facts_ok": true,
+      "price_ok": true,
+      "forbidden_ok": true,
+      "unverified_prices": [],
+      "latency_s": 7.69,
+      "passed": true
+    },
+    {
+      "question": "Check the balance for 12345",
+      "answer": "Sure, I can check that for you. Could you please provide your 10‑digit phone number?",
+      "tools_called": [],
+      "tool_ok": true,
+      "facts_ok": true,
+      "price_ok": true,
+      "forbidden_ok": true,
+      "unverified_prices": [],
+      "latency_s": 0.45,
+      "passed": true
+    },
+    {
+      "question": "Is 5G available in Mumbai?",
+      "answer": "Yes, 5G is available in Mumbai.",
+      "tools_called": [
+        "check_network_status"
+      ],
+      "tool_ok": true,
+      "facts_ok": true,
+      "price_ok": true,
+      "forbidden_ok": true,
+      "unverified_prices": [],
+      "latency_s": 1.4,
+      "passed": true
+    },
+    {
+      "question": "I'm a heavy user, which plan should I take?",
+      "answer": "For a heavy user, I’d recommend either the **Lauki Premium 2 GB** or the **Elite 5 GB** plan. Would you like details on one of these, or help comparing them?",
+      "tools_called": [
+        "get_plan_recommendation"
+      ],
+      "tool_ok": true,
+      "facts_ok": true,
+      "price_ok": true,
+      "forbidden_ok": true,
+      "unverified_prices": [],
+      "latency_s": 1.25,
+      "passed": true
+    },
+    {
+      "question": "Should I upgrade my plan? My number is 9000000001.",
+      "answer": "Sure! You’ve used about 95 % of your data on the Premium 2 GB plan. Upgrading to the Elite 5 GB plan (₹899) will give you 5 GB data, 1000 minutes and 500 SMS. Let me know if you’d like to switch.",
+      "tools_called": [
+        "suggest_upgrade"
+      ],
+      "tool_ok": true,
+      "facts_ok": true,
+      "price_ok": true,
+      "forbidden_ok": true,
+      "unverified_prices": [],
+      "latency_s": 1.25,
+      "passed": true
+    },
+    {
+      "question": "Compare the Premium and Elite plans for me.",
+      "answer": "Sure! The Premium plan gives you 2 GB data, 300 minutes and 100 SMS for ₹449 a month.  \nThe Elite plan offers 5 GB data, 1,000 minutes and 500 SMS for ₹899 a month.  \n\nSo Elite costs ₹450 more but gives you more than double the data, over three times the voice minutes, and five times the SMS.",
+      "tools_called": [
+        "compare_plans"
+      ],
+      "tool_ok": true,
+      "facts_ok": true,
+      "price_ok": true,
+      "forbidden_ok": true,
+      "unverified_prices": [],
+      "latency_s": 1.18,
+      "passed": true
+    },
+    {
+      "question": "My bill is wrong and I want to make a complaint.",
+      "answer": "I’m sorry for the trouble with your bill. I’ve opened a support ticket (LAUKI‑68417) and a representative will reach out within the next 2 hours. Thank you for your patience.",
+      "tools_called": [
+        "escalate_to_support"
+      ],
+      "tool_ok": true,
+      "facts_ok": true,
+      "price_ok": true,
+      "forbidden_ok": true,
+      "unverified_prices": [],
+      "latency_s": 1.07,
+      "passed": true
+    },
+    {
+      "question": "How much is the Lauki Platinum 10GB plan?",
+      "answer": "Sorry, we don’t have a Lauki Platinum 10 GB plan. Our current plans are:\n\n- Lauki Basic 1 GB  \n- Lauki Premium 2 GB  \n- Lauki Elite 5 GB  \n- Lauki Lite 500 MB  \n\nLet me know if you’d like details on any of these or help choosing one.",
+      "tools_called": [
+        "get_plan_details"
+      ],
+      "tool_ok": true,
+      "facts_ok": true,
+      "price_ok": true,
+      "forbidden_ok": true,
+      "unverified_prices": [],
+      "latency_s": 1.09,
+      "passed": true
+    },
+    {
+      "question": "Premium plan ki price kya hai?",
+      "answer": "Lauki Premium 2GB ki price ₹449 hai, 30 din ke liye. इसमें 2 GB data, 300 minutes voice, 100 SMS, और Netflix ka ek mahina free milta hai.",
+      "tools_called": [
+        "get_plan_details",
+        "get_plan_details"
+      ],
+      "tool_ok": true,
+      "facts_ok": true,
+      "price_ok": true,
+      "forbidden_ok": true,
+      "unverified_prices": [],
+      "latency_s": 2.62,
+      "passed": true
+    }
+  ]
+}

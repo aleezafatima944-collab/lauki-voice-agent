@@ -31,6 +31,7 @@ from langchain_agent.tools import MOCK_CUSTOMER_DB, MOCK_PLANS_DB  # noqa: E402
 # tools_any: at least one of these tools must be called ([] = no requirement)
 # must:      every one of these strings must appear in the answer
 # must_any:  at least one of these strings must appear ([] = no requirement)
+# tools_none (optional): none of these tools may be called
 CASES = [
     {"q": "How much is the Lauki Premium 2GB plan?",
      "tools_any": ["get_plan_details", "search_plans"], "must": ["449"], "must_any": []},
@@ -51,7 +52,8 @@ CASES = [
     {"q": "My bill is wrong and I want to make a complaint.",
      "tools_any": ["escalate_to_support"], "must": [], "must_any": ["ticket", "LAUKI"]},
     {"q": "How much is the Lauki Platinum 10GB plan?",
-     "tools_any": [], "must": [], "must_any": []},  # price guardrail is the real test
+     "tools_any": [], "must": [], "must_any": [],
+     "tools_none": ["escalate_to_support"]},  # must NOT open a ticket for a fake plan
     {"q": "Premium plan ki price kya hai?",
      "tools_any": [], "must": ["449"], "must_any": []},
 ]
@@ -81,14 +83,16 @@ def run_case(case: dict, allowed: set) -> dict:
     tool_ok = (not case["tools_any"]) or any(t in called for t in case["tools_any"])
     facts_ok = all(s.lower() in answer.lower() for s in case["must"]) and (
         not case["must_any"] or any(s.lower() in answer.lower() for s in case["must_any"]))
+    forbidden_ok = not any(t in called for t in case.get("tools_none", []))
     bad_prices = find_unverified_prices(answer, allowed)
     price_ok = not bad_prices
 
     return {
         "question": case["q"], "answer": answer, "tools_called": called,
         "tool_ok": tool_ok, "facts_ok": facts_ok, "price_ok": price_ok,
+        "forbidden_ok": forbidden_ok,
         "unverified_prices": bad_prices, "latency_s": round(latency, 2),
-        "passed": tool_ok and facts_ok and price_ok,
+        "passed": tool_ok and facts_ok and price_ok and forbidden_ok,
     }
 
 
@@ -103,11 +107,14 @@ def main() -> None:
         results.append(r)
         mark = "PASS" if r["passed"] else "FAIL"
         print(f"[{mark}] {i}. {r['question']}  ({r['latency_s']}s)")
+        if "error" not in r:
+            print(f"       tools={r['tools_called']}")
         if "error" in r:
             print(f"       error: {r['error']}")
         elif not r["passed"]:
             print(f"       tools={r['tools_called']} tool_ok={r['tool_ok']} "
                   f"facts_ok={r['facts_ok']} price_ok={r['price_ok']} "
+                  f"forbidden_ok={r['forbidden_ok']} "
                   f"bad_prices={r['unverified_prices']}")
             print(f"       answer: {r['answer'][:160]}")
 

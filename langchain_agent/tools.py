@@ -306,6 +306,7 @@ SYSTEM_PROMPT = (
     "- Use compare_plans when the customer wants two plans compared.\n"
     "- Use check_account_balance when the customer provides their 10-digit phone number.\n"
     "- Use check_network_status for 4G/5G coverage questions.\n"
+    "- If the customer asks about a plan that does not exist, say so briefly and list the available plans. Do NOT escalate for this.\n"
     "- Use get_plan_recommendation when the customer describes usage patterns.\n"
     "- Use get_plan_details for detailed plan information.\n"
     "- Use escalate_to_support for issues you cannot resolve.\n"

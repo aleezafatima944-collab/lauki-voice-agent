@@ -96,8 +96,8 @@ def compare_plans_text(plans: dict, plan_a: str, plan_b: str) -> str:
 
 # ---------------------------------------------------- price guardrail
 _PRICE_RE = re.compile(
-    r"(?:₹|rs\.?|inr)\s?(\d[\d,]*(?:\.\d+)?)"
-    r"|(\d[\d,]*(?:\.\d+)?)\s?(?:rupees|rs\b)",
+    r"(?:₹|\brs\.?|\binr)\s?(\d[\d,]*(?:\.\d+)?)"
+    r"|(\d[\d,]*(?:\.\d+)?)\s?(?:rupees|\brs\b)",
     re.IGNORECASE,
 )
 
